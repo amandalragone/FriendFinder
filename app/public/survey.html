@@ -25,8 +25,8 @@
                   <input type="text" class="form-control" id="name" placeholder="John Doe" required>
                 </div>
                 <div class="form-group">
-                    <label for="name" class="h5">Link to Photo Image (Required)</label>
-                    <input type="url" class="form-control" id="name" placeholder="https://mypicture.com" required>
+                    <label for="photo" class="h5">Link to Photo Image (Required)</label>
+                    <input type="url" class="form-control" id="photo" placeholder="https://mypicture.com" required>
                 </div>
                 
                 <hr>
@@ -163,7 +163,7 @@
                 </div>
                 
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
             </form>
 
             <!-- Links to API list an GitHub Repo -->
@@ -172,13 +172,85 @@
 
         </div>
         
-
-
-
         <!-- Compiled and minified JavaScript - Bootstrap -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+        <!-- Javascript code -->
+        <script type="text/javascript">
+        
+            //Creating contructor that will build the Friend object.
+            function Friend(name, photo, scores) {
+                this.name = name;
+                this.photo = photo;
+                this.scores = scores;
+            };
+            
+            //On click function that tells us what happens after the user presses Submit.
+            $("#submit").on("click", function(event){
+                
+                event.preventDefault(event);
+                
+                //Defining what are the vars that will be taken from the form.
+                var name = $("#name").val().trim();
+                var photo = $("#photo").val().trim();
+                
+                var scores = [];
+                var scoreQ1 = $("#question1").val();
+                var scoreQ2 = $("#question2").val();
+                var scoreQ3 = $("#question3").val();
+                var scoreQ4 = $("#question4").val();
+                var scoreQ5 = $("#question5").val();
+                var scoreQ6 = $("#question6").val();
+                var scoreQ7 = $("#question7").val();
+                var scoreQ8 = $("#question8").val();
+                var scoreQ9 = $("#question9").val();
+                var scoreQ10 = $("#question10").val();
+                
+                scores.push(scoreQ1);
+                scores.push(scoreQ2);
+                scores.push(scoreQ3);
+                scores.push(scoreQ4);
+                scores.push(scoreQ5);
+                scores.push(scoreQ6);
+                scores.push(scoreQ7);
+                scores.push(scoreQ8);
+                scores.push(scoreQ9);
+                scores.push(scoreQ10);
+                
+                //Using the vars assigned above to build a newFriend.
+                var newFriend = new Friend(name, photo, scores);
+
+                //Deleting values from the page.
+                $("#name").val("");
+                $("#photo").val("");
+                
+                $("#question1").val("");
+                $("#question2").val("");
+                $("#question3").val("");
+                $("#question4").val("");
+                $("#question5").val("");
+                $("#question6").val("");
+                $("#question7").val("");
+                $("#question8").val("");
+                $("#question9").val("");
+                $("#question10").val("");
+                
+                //Posting the newFriend var into the API.
+                $.post("/api/friends", newFriend).then(function(data) {
+                    
+                    alert("Added person successfully!");
+
+                });
+                    
+            });
+
+
+        </script>
     </body>
     
 </html>

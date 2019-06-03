@@ -10,8 +10,6 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'app/routing')));
-app.use(express.static(path.join(__dirname, 'app/public')));
 
 //Requiring files under the app/routing folder.
 require("./app/routing/apiRoutes.js")(app);

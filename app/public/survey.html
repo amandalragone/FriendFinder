@@ -240,12 +240,71 @@
                 $("#question9").val("");
                 $("#question10").val("");
                 
-                //Posting the newFriend var into the API.
-                $.post("/api/friends", newFriend).then(function(data) {
+                //Reading what's already written inside the friends API.
+                $.get("/api/friends", newFriend).then(function(data) {
                     
-                    alert("Added person successfully!");
+                    //Storing the new person's scores.
+                    var newFriendScore = newFriend.scores;
+
+                    //Creating a var to store the comparison value. It should always start as undefined.
+                    var comparison = undefined;
+                    
+                    //Mapping the API to get scores of all users.
+                    data.map(function(element) {
+
+                        //Total difference will start as 0.
+                        var total = 0;
+
+                        //The scores array from the user who's being analyzed will be stored in a var.
+                        var userScore = element.scores;
+
+                        //Now, we'll loop through the scores array from the user who's being analyzed.
+                        for (var i = 0; i<userScore.length; i++) {
+
+                            //If the current value is different from the user who was just created, the app will calculate the difference.
+                            if (userScore[i] !== newFriendScore[i]) {
+
+                                difference = parseInt(userScore[i]) - parseInt(newFriendScore[i]);
+
+                                if (difference < 0) {
+
+                                    difference = difference * (-1);
+                                    
+                                };
+
+                                //Then, it will add the difference to the total, until it has gotten all the different values.
+                                total = total + difference;
+
+                            };
+
+                        };
+
+                        //After coming up with the total, it will check what's the value stored in the comparison var. If it's undefined or more than the total, then it will become the total gotten for that user and that user will be the new match.
+                        if ((comparison === undefined) || (comparison > total)) {
+
+                            comparison = total;
+                            userMatch = element.name;
+
+                        }
+
+                    });
+
+                    //After doing all the comparisons, the new friend will be posted into the API.
+                    postNewUser(newFriend);
 
                 });
+                
+
+                function postNewUser(newFriend) {
+
+                    //Posting the newFriend var into the API.
+                    $.post("/api/friends", newFriend).then(function(data) {
+                                        
+                        alert("Added person successfully!");
+
+                    });
+
+                }
                     
             });
 
